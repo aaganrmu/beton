@@ -6,8 +6,8 @@ from ledz.ledz import Ledz
 
 # setup pixel array
 pin = board.GP29 # Final value I guess
-rows = 1         # will be 2
-columns = 8      # will be 32
+rows = 1
+columns = 64
 leds = Ledz(rows,columns,pin,brightness=1)
 
 # setup controller
@@ -17,7 +17,7 @@ for controll in controlls:
     controll.direction = digitalio.Direction.INPUT
     controll.pull = digitalio.Pull.UP
 
-
+colour_curve = (255,191,127)
 
 old_value = 0
 # Main loop
@@ -29,6 +29,8 @@ while True:
     if value == old_value:
         continue
     old_value = value
-    print(value)
-    leds.fill((value, value, value))
+    colour = tuple(int(value * channel/255) for channel in colour_curve)
+    print(colour)
+
+    leds.fill(colour)
     leds.show()
